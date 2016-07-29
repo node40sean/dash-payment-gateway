@@ -16,12 +16,13 @@ CREATE TABLE
         username VARCHAR(255) NOT NULL,
         dash_payment_address VARCHAR(255) NOT NULL,
         amount_fiat DECIMAL(19,2),
-        type_fiat DECIMAL(19,2),
-        base_fiat VARCHAR(20) NOT_NULL,
+        type_fiat VARCHAR(20),
+        base_fiat DECIMAL(19,2) NOT NULL,
         amount_duffs bigint NOT NULL,
         payment_received_amount_duffs bigint,
         created_date DATETIME NOT NULL,
-        payment_date DATETIME NOT NULL,
+        payment_date DATETIME,
+        description VARCHAR(255),
         PRIMARY KEY (receiver_id),
         CONSTRAINT FK_userid FOREIGN KEY (username) REFERENCES user (username)
     )

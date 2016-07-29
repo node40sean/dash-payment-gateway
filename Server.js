@@ -1,9 +1,10 @@
-var express      = require('express');
-var app          = express();
-var AppConfig    = require('./config/AppConfig');
-var Database     = require('./repository/Database');
-var UserService  = require('./service/UserService');
-var bodyParser   = require('body-parser');
+var express          = require('express');
+var app              = express();
+var AppConfig        = require('./config/AppConfig');
+var Database         = require('./repository/Database');
+var UserService      = require('./service/UserService');
+var ReceiverService  = require('./service/ReceiverService');
+var bodyParser       = require('body-parser');
 
 app.use(bodyParser.json()); // support json encoded bodies
 
@@ -18,7 +19,13 @@ app.post('/createReceiver', function(req,res){
 		if ( err ){
 			res.send(err);
 		}else{
-			res.send(user);
+			ReceiverService.createReceiver(username, fiatCode, fiatAmount, description, function(err, receiver){
+				if ( err ){
+					res.send(err);
+				}else{
+					res.send(receiver);
+				}
+			});
 		}
 	});
 
