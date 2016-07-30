@@ -6,7 +6,13 @@ var config = {
       name: 'dash-payment=gateway'
     },
     port: process.env.PORT || 9001,
-    logLevel: 'DEBUG' // EMERGENCY|ALERT|CRITICAL|ERROR|WARNING|NOTICE|INFO|DEBUG
+    logLevel: 'DEBUG', // EMERGENCY|ALERT|CRITICAL|ERROR|WARNING|NOTICE|INFO|DEBUG
+    worldcoin: {
+        name:  'WorldCoinIndex',
+        orgUrl: 'https://www.worldcoinindex.com',
+        url: 'https://www.worldcoinindex.com/apiservice/json',
+        apiKey: 'mnuEVZ58xJnbnsSfBDH5jEWvg'
+      }
   }
 };
 
