@@ -36,3 +36,7 @@ Then, open `DBConfig.js` and supply your database credentials.
 
 ## Configuration
 Application-level configuration, such as logging and external API endpoints is all maintained in `config/AppConfig.js`
+
+# Technical Docs
+
+Developer documentation and endpoint specifications for clients can be found in the [wiki](https://github.com/node40sean/dash-payment-gateway/wiki).
