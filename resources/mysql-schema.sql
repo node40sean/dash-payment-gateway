@@ -29,3 +29,12 @@ CREATE TABLE
         CONSTRAINT FK_userid FOREIGN KEY (username) REFERENCES user (username)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE
+    data_cache
+    (
+        `key` VARCHAR(255) NOT NULL,
+        cache LONGTEXT NOT NULL,
+        PRIMARY KEY (`key`)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
