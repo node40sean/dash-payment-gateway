@@ -9,8 +9,8 @@ var getNextAddress = function (callback) {
 
     CounterRepository.getAndIncrement('hd-wallet-child', function(err, child){
 
-        log.debug('Getting new deposit address at position ' + child);
-        var nextAddress = HDWallet.GetAddress(AppConfig.walletPublicSeed, child);
+        log.debug('Getting new deposit address at position ' + child + ' with seed: ' + AppConfig.wallet.seed);
+        var nextAddress = HDWallet.GetAddress(AppConfig.wallet.seed, child);
 
         if (bitcore.Address.isValid(nextAddress)) {
             callback(null, nextAddress.toString());
