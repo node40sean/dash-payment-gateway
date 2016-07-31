@@ -23,6 +23,13 @@ After you have configured a database (see below), you can run the server by issu
 
     npm start
 
+## Testing
+Test using Mocha
+
+    npm install -g mocha
+
+    npm test
+
 ## Database
 The gateway stores persistent data in a MySQL database. The [schema](https://github.com/node40sean/dash-payment-gateway/blob/master/resources/mysql-schema.sql) is located in the `resources/` folder.
 
