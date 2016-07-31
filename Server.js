@@ -1,10 +1,12 @@
 var express          = require('express');
-var app              = express();
 var AppConfig        = require('./config/AppConfig');
-var Database         = require('./repository/Database');
+var Bootstrap        = require('./service/Bootstrap');
 var UserService      = require('./service/UserService');
 var ReceiverService  = require('./service/ReceiverService');
 var bodyParser       = require('body-parser');
+var app              = express();
+var Logger           = require('log');
+var log              = new Logger(AppConfig.logLevel);
 
 app.use(bodyParser.json()); // support json encoded bodies
 
@@ -33,11 +35,19 @@ app.post('/createReceiver', function(req,res){
 
 });
 
-Database.connect();
+Bootstrap.initialize(function(err, results){
+	if ( err ){
+		log.emergency(err);
+	}else{
 
-var server = app.listen(AppConfig.port, function () {
+		log.info(results);
 
-	var host = server.address().address;
-	var port = server.address().port;
-	console.log('Payment Gateway is now listening at http://%s:%s', host, port);
+		var server = app.listen(AppConfig.port, function () {
+
+			var host = server.address().address;
+			var port = server.address().port;
+			log.info('Payment Gateway is now listening at http://%s:%s', host, port);
+		});	
+	}
 });
+

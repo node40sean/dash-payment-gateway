@@ -7,6 +7,7 @@ var config = {
             name: 'dash-payment=gateway'
         },
         network: bitcore.Networks.mainnet,
+        walletPublicSeed: 'drkvjJe5sJgqomjLo9QN1bF9pVRaNjtpWRpLmJk3wq2vGQsCkT3ErLcwKcQ8gqUrQm61yCSEHdcwxFEPXnCLjzsAynVbcoifSJJeo5bSCQjibsV',
         port: process.env.PORT || 9001,
         logLevel: 'DEBUG', // EMERGENCY|ALERT|CRITICAL|ERROR|WARNING|NOTICE|INFO|DEBUG
         worldcoin: {
