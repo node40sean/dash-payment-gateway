@@ -38,3 +38,14 @@ CREATE TABLE
         PRIMARY KEY (cache_key)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+    
+CREATE TABLE
+    counter
+    (
+        counter_key VARCHAR(255) NOT NULL,
+        counter_value bigint NOT NULL,
+        PRIMARY KEY (counter_key)
+    )
+    ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    
