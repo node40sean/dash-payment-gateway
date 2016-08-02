@@ -15,22 +15,27 @@ var initialize = function(callback){
 	CounterRepository.findOrCreate('hd-wallet-child', function(err, value){
 		log.warning('Next child address for the HD Wallet will be at position ' + value);
 
-		if ( AppConfig.wallet.seed.startsWith('xpub') ){
-			// Convert seed to BIP32
-			var bip32Seed = HDWallet.ImportElectrumPubKey(AppConfig.wallet.seed, AppConfig.wallet.network).xpubkey;
-			log.info('Electrum seed [' + AppConfig.wallet.seed + '] converted to BIP32 format [' + bip32Seed + ']');
+		if ( AppConfig.wallet.seed.startsWith('xpub') || AppConfig.wallet.seed.startsWith('tpub') ){
+			
+			// Import the seed as a Bitcore HDPublicKey object
+        	// (seed is a BIP32 extended skey https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
+			var bip32Seed = HDWallet.ImportXPubKey(AppConfig.wallet.seed, AppConfig.wallet.network);
+
+			log.info('Electrum master key converted to BIP32 format [' + bip32Seed + ']');
 			AppConfig.wallet.seed = bip32Seed;
 
-			if ( bitcore.HDPublicKey.isValidSerialized(AppConfig.wallet.seed, AppConfig.wallet.network) ){
-				log.info('Seed is valid for ' + AppConfig.wallet.network);
-			}
-			// console.log('Seed address is ' + bitcore.Address(AppConfig.wallet.seed));
-
-		}else{
-			log.debug('Wallet seed is BIP32 compatible.');
 		}
 
-		callback(null, 'App initialized.')
+		// Eventually we want to test if the key is valid but for now, this will always fail to it's commented out until
+		// electrun is updated to produce BIP32 keys
+		//
+		// if ( bitcore.HDPublicKey.isValidSerialized(AppConfig.wallet.seed, AppConfig.wallet.network) ){
+		// 	log.info('Master Key is valid for ' + AppConfig.wallet.network);
+		// }else{
+		// 	return callback('Master Key is not valid. Please provide a valid Electrun or BIP32 compatible seed in AppConfig.js');
+		// }
+
+		return callback(null, 'App initialized.')
 	});
 };
 

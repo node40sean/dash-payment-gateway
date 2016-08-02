@@ -38,6 +38,7 @@ app.post('/createReceiver', function(req,res){
 Bootstrap.initialize(function(err, results){
 	if ( err ){
 		log.emergency(err);
+		process.exit(1);
 	}else{
 
 		log.info(results);
