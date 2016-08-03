@@ -1,8 +1,11 @@
-var dbPool        = require('./Database').connect();
-var Logger        = require('log');
-var AppConfig     = require('../config/AppConfig');
+var dbPool             = require('./Database').connect();
+var Logger             = require('log');
+var AppConfig          = require('../config/AppConfig');
+var LokiCache          = require('lokijs');
+var ReceiverRepository = require('./ReceiverRepository');
 
-var log = new Logger(AppConfig.logLevel)
+var log = new Logger(AppConfig.logLevel);
+var receivers;
 
 var getData = function(cacheKey, connection, callback){
 	connection.query("select cache_data from data_cache where cache_key = ?", [cacheKey], function(err,result){ 
@@ -50,8 +53,34 @@ var cacheValuation = function(exchange, data, callback){
     });
 };
 
+var getPendingPayment = function(address){
+    return receivers.find({'dash_payment_address': address});
+};
+
+var initialize = function(callback){
+    if ( global.cache == undefined ){
+        global.cache = new LokiCache('cache');
+    }
+
+    ReceiverRepository.getUnpaid(function(err, results){
+
+        if ( err ){
+            return callback(err, results);
+        }else{
+            receivers = global.cache.addCollection('receivers', { indices: ['dash_payment_address'] });
+            for ( var i = 0 ; i < results.length ; i++ ){
+                receivers.insert(results[i]);
+                log.debug('Waiting for payment of ' + results[i].amount_duffs + ' duffs to ' + results[i].dash_payment_address);
+            }
+            return callback(err,'Cache initialized.');
+        }
+    });
+
+};
 
 module.exports = {
 	cacheValuation: cacheValuation,
-	getCachedData: getCachedData
+	getCachedData: getCachedData,
+    initialize: initialize,
+    getPendingPayment: getPendingPayment
 };

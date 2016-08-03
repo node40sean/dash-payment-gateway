@@ -12,16 +12,17 @@ app.use(bodyParser.json()); // support json encoded bodies
 
 app.post('/createReceiver', function(req,res){
 
-	var fiatCode    = req.body.currency
-	var fiatAmount  = req.body.amount
-	var username    = req.body.email
-	var description = req.body.description
+	var fiatCode    = req.body.currency;
+	var fiatAmount  = req.body.amount;
+	var username    = req.body.email;
+	var description = req.body.description;
+	var callbackUrl = req.body.callbackUrl;
 
 	var user = UserService.findOrCreate(username, function(err, user){
 		if ( err ){
 			res.send(err);
 		}else{
-			ReceiverService.createReceiver(username, fiatCode, fiatAmount, description, function(err, receiver){
+			ReceiverService.createReceiver(username, fiatCode, fiatAmount, description, callbackUrl, function(err, receiver){
 				if ( err ){
 					res.send(err);
 				}else{
@@ -30,8 +31,21 @@ app.post('/createReceiver', function(req,res){
 			});
 		}
 	});
+});
 
+/**
+*   Example callback URL - Not for use in a production environment. This endpoint is used only for testing to output the 
+*   the results of a callback URL without having to run a completely separate server during development.
+*/
+app.post('/cb', function(req,res){
 
+	console.log('**********************************************************************************************');
+	console.log('Received a call from the payment gateway - a payment must have been made.');
+	console.log('**********************************************************************************************');
+	console.log(JSON.stringify(req.body, null, 3));
+	console.log('**********************************************************************************************');
+
+	res.send('OK')
 
 });
 

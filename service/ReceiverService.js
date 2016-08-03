@@ -4,10 +4,12 @@ var ReceiverRepository    = require('../repository/ReceiverRepository');
 var WalletService         = require('./WalletService');
 var DashValuationService  = require('./DashValuationService');
 var RandomString          = require("randomstring");
+var Request               = require('request');
+
 
 var log = new Logger(AppConfig.logLevel)
 
-var createReceiver = function(username, fiatCode, fiatAmount, description, callback){
+var createReceiver = function(username, fiatCode, fiatAmount, description, callbackUrl, callback){
 	WalletService.getNextAddress(function(err, address){
 		if ( err ){
 			return callback(err, null);
@@ -23,7 +25,8 @@ var createReceiver = function(username, fiatCode, fiatAmount, description, callb
 					type_fiat: fiatCode,
 					base_fiat: value,
 					amount_duffs: amountDuffs.toFixed(0),
-					description: description
+					description: description,
+					callback_url: callbackUrl
 				};
 
 				ReceiverRepository.createNewReceiver(receiver, function(err, results){
@@ -38,6 +41,23 @@ var createReceiver = function(username, fiatCode, fiatAmount, description, callb
 	});
 };
 
+var processReceivedPayment = function(tx, receiverId, amountDuffs){
+	ReceiverRepository.updatePayment(receiverId, amountDuffs, function(err, results){
+		if ( err ){
+			log.error('Error trying to update a receiver\'s payment. Details: ' + err);
+		}else{
+			// Request({
+			// 	url: results.callback_url,
+			// 	method: 'PUT',
+			// 	json: results
+			// }, function(err, resp){
+			// 	log.debug('Response from callback URL: ' + resp);
+			// });
+		}
+	});
+};
+
 module.exports = {
-	createReceiver: createReceiver
+	createReceiver: createReceiver,
+	processReceivedPayment: processReceivedPayment
 };

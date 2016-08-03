@@ -25,6 +25,7 @@ CREATE TABLE
         created_date DATETIME NOT NULL,
         payment_date DATETIME,
         description VARCHAR(255),
+        callback_url VARCHAR(255) NOT NULL,
         PRIMARY KEY (receiver_id),
         CONSTRAINT FK_userid FOREIGN KEY (username) REFERENCES user (username)
     )

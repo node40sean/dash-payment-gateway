@@ -2,6 +2,7 @@ var AppConfig          = require('../config/AppConfig');
 var Logger             = require('log');
 var Database           = require('../repository/Database');
 var CounterRepository  = require('../repository/CounterRepository');
+var CacheRepository    = require('../repository/CacheRepository');
 var HDWallet           = require('../lib/HDWallet');
 var bitcore            = require('bitcore-lib-dash');
 var BlockChainObserver = require('./BlockChainObserver');
@@ -36,9 +37,19 @@ var initialize = function(callback){
 		// 	return callback('Master Key is not valid. Please provide a valid Electrun or BIP32 compatible seed in AppConfig.js');
 		// }
 
-		BlockChainObserver.start();
+		CacheRepository.initialize(function(err, results){
+			if ( err ){
+				return callback(err, results);
+			}else{
+				
+				log.info(results);
+				BlockChainObserver.start();
 
-		return callback(null, 'App initialized.')
+				return callback(null, 'App initialized.')
+			}
+		});
+		
+		
 	});
 };
 

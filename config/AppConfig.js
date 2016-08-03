@@ -6,6 +6,7 @@ var config = {
         app: {
             name: 'dash-payment=gateway'
         },
+        insight: 'http://jaxx-test.dash.org:3001/',
         wallet: {
             //seed: 'drkvjJe5sJgqomjLo9QN1bF9pVRaNjtpWRpLmJk3wq2vGQsCkT3ErLcwKcQ8gqUrQm61yCSEHdcwxFEPXnCLjzsAynVbcoifSJJeo5bSCQjibsV', //MAINNET
             seed: 'xpub661MyMwAqRbcEorCw5Bqik47NhE4RCgCgxqvM3DqfpUvVo7dEk7HL5BmqLJCT4EvBUK2pTewJjpd4Z64nXDTaqQuAhuYH4PFdTenCkHzuQa', // ELECTRUM
