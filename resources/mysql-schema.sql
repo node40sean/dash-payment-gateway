@@ -35,7 +35,7 @@ CREATE TABLE
     data_cache
     (
         cache_key VARCHAR(255) NOT NULL,
-        cache_data JSON,
+        cache_data LONGTEXT,
         PRIMARY KEY (cache_key)
     )
     ENGINE=InnoDB DEFAULT CHARSET=utf8;
