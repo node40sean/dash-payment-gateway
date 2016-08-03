@@ -34,7 +34,7 @@ var getUnpaid = function(callback){
 };
 
 var updatePayment = function(receiverId, amountDuffs, callback){
-	return callback(null, {foo: 'bar'});
+	return callback(null, {callback_url: 'http://localhost:9001/cb'});
 };
 
 module.exports = {

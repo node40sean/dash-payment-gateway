@@ -14,30 +14,28 @@ var start = function(){
 
 	socket.on('tx', function(data) {
 
-		data.vout.forEach(function(el, idx, array){
+		var address = '', amount = 0, i, key, pendingPayment;
 
-			var address, amount;
-			for(var key in el) {
-			    if(el.hasOwnProperty(key)) {
-			        amount = el[key];
+		for ( i = 0 ; i < data.vout.length ; i++ ){
+
+			
+			for(key in data.vout[i]) {
+			    if(data.vout[i].hasOwnProperty(key)) {
+			        amount = data.vout[i][key];
 			        address = key;
 			        break;
 			    }
 			}
 
-			var pendingPayment = CacheRepository.getPendingPayment(address);
+			pendingPayment = CacheRepository.getPendingPayment(address);
 			if ( pendingPayment ){
+				log.debug('Payment received at ' + address + ' for ' + amount + ' duffs');
 				ReceiverService.processReceivedPayment(data, pendingPayment.receiver_id, amount);
+				break;
 			}
-		});
+		}
 
-		console.log('Transaction -' + JSON.stringify(data));
-
-		// if (data.txlock) {
-		// 	console.log("New InstantSend transaction received: " + JSON.stringify(data));
-		// } else {
-		// 	console.log("New transaction received: " + JSON.stringify(data));
-		// }
+		log.debug('Observed Transaction ==> ' + JSON.stringify(data));
 	});
 };
 

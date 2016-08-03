@@ -42,17 +42,19 @@ var createReceiver = function(username, fiatCode, fiatAmount, description, callb
 };
 
 var processReceivedPayment = function(tx, receiverId, amountDuffs){
+
 	ReceiverRepository.updatePayment(receiverId, amountDuffs, function(err, results){
 		if ( err ){
 			log.error('Error trying to update a receiver\'s payment. Details: ' + err);
 		}else{
-			// Request({
-			// 	url: results.callback_url,
-			// 	method: 'PUT',
-			// 	json: results
-			// }, function(err, resp){
-			// 	log.debug('Response from callback URL: ' + resp);
-			// });
+			Request({
+				url: 'http://localhost:9001/cb',
+				method: 'post',
+				body: {'foo': 'bar'},
+				json: true
+			}, function(err, resp){
+				log.debug('Response from callback URL: ' + resp);
+			});
 		}
 	});
 };
