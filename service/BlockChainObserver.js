@@ -35,7 +35,7 @@ var start = function(){
 			}
 		}
 
-		log.debug('Observed Transaction ==> ' + JSON.stringify(data));
+		//log.debug('Observed Transaction ==> ' + JSON.stringify(data));
 	});
 };
 

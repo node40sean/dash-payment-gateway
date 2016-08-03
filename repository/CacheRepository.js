@@ -54,7 +54,8 @@ var cacheValuation = function(exchange, data, callback){
 };
 
 var getPendingPayment = function(address){
-    return receivers.find({'dash_payment_address': address});
+    var pendingPayment = receivers.find({'dash_payment_address': address});
+    return pendingPayment.length > 0 ? pendingPayment[0] : undefined;
 };
 
 var initialize = function(callback){
