@@ -31,19 +31,31 @@ var initialize = function(callback){
 		// Eventually we want to test if the key is valid but for now, this will always fail to it's commented out until
 		// electrun is updated to produce BIP32 keys
 		//
-		// if ( bitcore.HDPublicKey.isValidSerialized(AppConfig.wallet.seed, AppConfig.wallet.network) ){
-		// 	log.info('Master Key is valid for ' + AppConfig.wallet.network);
-		// }else{
-		// 	return callback('Master Key is not valid. Please provide a valid Electrun or BIP32 compatible seed in AppConfig.js');
-		// }
+		//    if ( bitcore.HDPublicKey.isValidSerialized(AppConfig.wallet.seed, AppConfig.wallet.network) ){
+		//    	log.info('Master Key is valid for ' + AppConfig.wallet.network);
+		//    }else{
+		//    	return callback('Master Key is not valid. Please provide a valid Electrun or BIP32 compatible seed in AppConfig.js');
+		//    }
 
 		CacheRepository.initialize(function(err, results){
+
+			var pendingPayments
+
 			if ( err ){
 				return callback(err, results);
 			}else{
 				
 				log.info(results);
 				BlockChainObserver.start();
+
+				pendingPayments = CacheRepository.getPendingPayments();
+				if ( pendingPayments.length > 0 ){
+					for ( var i = 0 ; i < pendingPayments.length ; i++ ){
+						BlockChainObserver.checkForPayment(pendingPayments[i]);
+					}
+				}else{
+					log.debug('No pending payments to wait for.');
+				}
 
 				return callback(null, 'App initialized.')
 			}

@@ -26,7 +26,18 @@ app.post('/createReceiver', function(req,res){
 				if ( err ){
 					res.send(err);
 				}else{
-					res.send(receiver);
+					ReceiverService.listenForPayment(receiver);
+					res.send({
+						receiver_id: receiver.receiver_id,
+						username: receiver.username,
+						dash_payment_address: receiver.dash_payment_address,
+						amount_fiat: receiver.amount_fiat,
+						type_fiat: receiver.type_fiat,
+						base_fiat: receiver.base_fiat,
+						amount_duffs: receiver.amount_duffs,
+						created_date: receiver.created_date,
+						description: receiver.description
+					});
 				}
 			});
 		}
@@ -34,7 +45,7 @@ app.post('/createReceiver', function(req,res){
 });
 
 /**
-*   Example callback URL - Not for use in a production environment. This endpoint is used only for testing to output the 
+*   Example callback URL - Not for use in a production environment. This endpoint is used only for testing, to output the 
 *   the results of a callback URL without having to run a completely separate server during development.
 */
 app.post('/cb', function(req,res){

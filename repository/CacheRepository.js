@@ -53,9 +53,27 @@ var cacheValuation = function(exchange, data, callback){
     });
 };
 
+var getPendingPayments = function(){
+    return receivers.find();
+};
+
 var getPendingPayment = function(address){
     var pendingPayment = receivers.find({'dash_payment_address': address});
     return pendingPayment.length > 0 ? pendingPayment[0] : undefined;
+};
+
+var removeReceiver = function(address){
+    receivers.remove(receivers.find({'dash_payment_address': address}));
+};
+
+var updateReceiver = function(receiver){
+    var cachedReceiver = receivers.find({'dash_payment_address': receiver.dash_payment_address});
+    cachedReceiver.payment_received_amount_dash = receiver.payment_received_amount_dash;
+    receivers.update(cachedReceiver);
+};
+
+var addReceiver = function(receiver){
+    receivers.insert(receiver);
 };
 
 var initialize = function(callback){
@@ -70,7 +88,7 @@ var initialize = function(callback){
         }else{
             receivers = global.cache.addCollection('receivers', { indices: ['dash_payment_address'] });
             for ( var i = 0 ; i < results.length ; i++ ){
-                receivers.insert(results[i]);
+                addReceiver(results[i]);
                 log.debug('Waiting for payment of ' + results[i].amount_duffs + ' duffs to ' + results[i].dash_payment_address);
             }
             return callback(err,'Cache initialized.');
@@ -83,5 +101,9 @@ module.exports = {
 	cacheValuation: cacheValuation,
 	getCachedData: getCachedData,
     initialize: initialize,
-    getPendingPayment: getPendingPayment
+    getPendingPayment: getPendingPayment,
+    removeReceiver: removeReceiver,
+    getPendingPayments: getPendingPayments,
+    updateReceiver: updateReceiver,
+    addReceiver: addReceiver
 };
