@@ -44,6 +44,12 @@ Then, open `DBConfig.js` and supply your database credentials.
 ## Configuration
 Application-level configuration, such as logging and external API endpoints is all maintained in `config/AppConfig.js`
 
+### Insight
+This application interacts with Insight via a URL. Ideally, you also control the Insight application in your own infrastructure. However, since you only need to supply this application an Insight URL, you are free to use a third party Insight provider. In fact, that is how it was developed. As of this writing, the Insight URL used is `http://jaxx-test.dash.org:3001/`
+
+### Wallet Seed
+You are respnsible for seeding the application with your Master Address Seed. This can be in BIP32 format, or Electrum format. Place the seed value in [AppConfig.js](https://github.com/node40sean/dash-payment-gateway/blob/master/config/AppConfig.js).
+
 # Technical Docs
 
 Developer documentation and endpoint specifications for clients can be found in the [wiki](https://github.com/node40sean/dash-payment-gateway/wiki).
