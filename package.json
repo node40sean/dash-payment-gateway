@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "test": "mocha test/test.js"
+    "test": "mocha test/test.js",
+    "start": "NODE_ENV=development node Server.js"
   },
   "dependencies": {
     "async": "^2.0.0",
